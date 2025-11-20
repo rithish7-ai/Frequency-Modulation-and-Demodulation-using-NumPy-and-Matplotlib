@@ -22,10 +22,100 @@ Frequency Modulation (FM) is a method of transmitting information over a carrier
 
 ### PROGRAM
 
+    import numpy as np
+    
+    import matplotlib.pyplot as plt
+    
+    from scipy.signal import hilbert
+    
+    Am = 7.5
+    
+    fm = 217.9
+    
+    fs = 21790
+    
+    Ac = 15
+    
+    fc = 2179
+    
+    b = 6
+    
+    t = np.arange(0, 2/fm, 1/fs)
+    
+    
+    m = Am * np.cos(2 * np.pi * fm * t)
+    
+    c = Ac * np.cos(2 * np.pi * fc * t)
+    
+    s = Ac * np.cos(2 * np.pi * fc * t + b * np.sin(2 * np.pi * fm * t))
+    
+    
+    ds = np.diff(s)
+    
+    analytic_signal = hilbert(ds) 
+    
+    envelope = np.abs(analytic_signal) 
+    
+    demod = envelope - np.mean(envelope) 
+    
+    demod = demod / np.max(np.abs(demod)) * Am 
+    
+    plt.figure(figsize=(10,8))
+    
+    plt.subplot(4,1,1)
+    
+    plt.plot(t, m)
+    
+    plt.title("Message Signal")
+    
+    plt.xlabel("Time (s)")
+    
+    plt.ylabel("Amplitude")
+    
+    plt.subplot(4,1,2)
 
-### TABULATION
+    plt.plot(t, c)
+    
+    plt.title("Carrier Signal")
+    
+    plt.xlabel("Time (s)")
+    
+    plt.ylabel("Amplitude")
 
-### OUTPUT
-   
-### RESULT
+
+    plt.subplot(4,1,3)
+    
+    plt.plot(t, s)
+    
+    plt.title("Frequency Modulated Signal (FM)")
+    
+    plt.xlabel("Time (s)")
+    
+    plt.ylabel("Amplitude")
+    
+    plt.subplot(4,1,4)
+    
+    plt.plot(t[:-1], demod)  # ds shortens length by 1
+    
+    plt.title("Demodulated Signal (Recovered Message)")
+    
+    plt.xlabel("Time (s)")
+    
+    plt.ylabel("Amplitude")
+    
+    plt.tight_layout()
+    
+    plt.show()
+
+### TABULATION:
+<img width="514" height="554" alt="image" src="https://github.com/user-attachments/assets/0e023a37-9b88-47df-97e9-5cf390cc804b" />
+
+
+### OUTPUT:
+
+![WhatsApp Image 2025-11-20 at 07 20 51_2be60992](https://github.com/user-attachments/assets/c29349c0-77d5-48dd-8477-09d456ff59ae)
+
+### RESULT:
+
+The message signal, carrier signal, and frequency modulated (FM) signal will be displayed in separate plots. The modulated signal will show frequency variations corresponding to the amplitude of the message signal.
 
